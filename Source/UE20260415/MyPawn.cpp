@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MyRocket.h"
 #include "MyRotateStaticMeshComponent.h"
+#include "EnhancedInputComponent.h"
 
 // Sets default values
 AMyPawn::AMyPawn()
@@ -67,14 +68,10 @@ AMyPawn::AMyPawn()
 	FloatingPawnMovement->MaxSpeed = MoveSpeed;
 }
 
-void AMyPawn::Pitch(float InValue)
+void AMyPawn::Rotate(const FInputActionValue& Value)
 {
-	AddActorLocalRotation(FRotator(InValue * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 0.0f, 0.0f));
-}
-
-void AMyPawn::Roll(float InValue)
-{
-	AddActorLocalRotation(FRotator(0.0f, 0.0f,InValue * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
+	FVector2D RotateValue = Value.Get<FVector2D>() * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld());
+	AddActorLocalRotation(FRotator(RotateValue.Y, 0.0f, RotateValue.X));
 }
 
 void AMyPawn::Fire()
@@ -112,11 +109,13 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
-	// PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
-	// 
-	// PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &AMyPawn::Fire);
-	// PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Pressed, this, &AMyPawn::Boost);
-	// PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Released, this, &AMyPawn::UnBoost);
+	UEnhancedInputComponent* EIC = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if(EIC)
+	{
+		EIC->BindAction(IA_Rotate, ETriggerEvent::Triggered, this, &AMyPawn::Rotate);
+		EIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyPawn::Fire);
+		EIC->BindAction(IA_Boost, ETriggerEvent::Started, this, &AMyPawn::Boost);
+		EIC->BindAction(IA_Boost, ETriggerEvent::Completed, this, &AMyPawn::UnBoost);
+	}
 }
 

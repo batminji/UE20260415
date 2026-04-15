@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputAction.h"
+#include "InputActionValue.h"
 #include "MyPawn.generated.h"
 
 class UBoxComponent;
@@ -23,14 +25,9 @@ public:
 	// Sets default values for this pawn's properties
 	AMyPawn();
 
-	void Pitch(float InValue);
-
-	void Roll(float InValue);
-
+	void Rotate(const FInputActionValue& Value);
 	void Fire();
-
 	void Boost();
-
 	void UnBoost();
 
 protected:
@@ -67,6 +64,15 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component");
 	TObjectPtr<UArrowComponent> Arrow;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_Rotate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_Fire;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_Boost;
 
 protected:
 	float MoveSpeed = 1000.0f;

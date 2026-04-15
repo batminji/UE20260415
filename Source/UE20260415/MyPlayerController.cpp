@@ -3,6 +3,7 @@
 
 #include "MyPlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
 
 AMyPlayerController::AMyPlayerController()
 {
@@ -21,10 +22,10 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			/*if (!InputMapping.IsNull())
+			if (InputMapping)
 			{
-				InputSystem->AddMappingContext(InputMapping.LoadSynchronous(), Priority);
-			}*/
+				InputSystem->AddMappingContext(InputMapping, 0);
+			}
 		}
 	}
 }
