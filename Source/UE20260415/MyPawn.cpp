@@ -75,6 +75,7 @@ void AMyPawn::Roll(float InValue)
 
 void AMyPawn::Fire()
 {
+	
 }
 
 void AMyPawn::Boost()
@@ -109,5 +110,9 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
 	PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &AMyPawn::Fire);
+	PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Pressed, this, &AMyPawn::Boost);
+	PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Released, this, &AMyPawn::UnBoost);
 }
 
