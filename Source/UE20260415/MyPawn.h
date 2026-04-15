@@ -22,6 +22,16 @@ public:
 	// Sets default values for this pawn's properties
 	AMyPawn();
 
+	void Pitch(float InValue);
+
+	void Roll(float InValue);
+
+	void Fire();
+
+	void Boost();
+
+	void UnBoost();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -61,4 +71,6 @@ protected:
 	float MoveSpeed = 1000.f;
 
 	float BoostValue = 0.5f;
+
+	float RotationSpeed = 60.f;
 };
