@@ -69,7 +69,7 @@ public:
 	TObjectPtr<UArrowComponent> Arrow;
 
 protected:
-	float MoveSpeed = 1000.f;
+	float MoveSpeed = 1000.0f;
 
 	float BoostValue = 0.5f;
 

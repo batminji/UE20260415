@@ -5,6 +5,9 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
 
 // Sets default values
 AMyRocket::AMyRocket()
@@ -30,10 +33,31 @@ AMyRocket::AMyRocket()
 	ProjectileMovementComponent->InitialSpeed = MoveSpeed;
 	ProjectileMovementComponent->MaxSpeed = MoveSpeed;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> P_Explosion(TEXT("/Script/Engine.ParticleSystem'/Game/Assets/Particles/P_Explosion.P_Explosion'"));
+	if (P_Explosion.Succeeded())
+	{
+		ExplosionEffect = P_Explosion.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> S_Explosion(TEXT("/Script/Engine.SoundWave'/Game/Assets/Sounds/Explosion01.Explosion01'"));
+	if (S_Explosion.Succeeded())
+	{
+		ExplosionSound = S_Explosion.Object;
+	}
 }
 
 void AMyRocket::ProcessActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
+	if (ExplosionEffect)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect, GetActorLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(2.0f, 2.0f, 2.0f));
+	}
+	if (ExplosionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+	}
+
 	Destroy();
 }
 
@@ -42,7 +66,7 @@ void AMyRocket::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetLifeSpan(0.5f);
+	SetLifeSpan(5.0f);
 
 	OnActorBeginOverlap.AddDynamic(this, &AMyRocket::ProcessActorBeginOverlap);
 }

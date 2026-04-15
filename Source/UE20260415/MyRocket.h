@@ -9,6 +9,8 @@
 class UBoxComponent;
 class UStaticMeshComponent;
 class UProjectileMovementComponent;
+class UParticleSystem;
+class USoundBase;
 
 UCLASS()
 class UE20260415_API AMyRocket : public AActor
@@ -34,6 +36,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TObjectPtr<UParticleSystem> ExplosionEffect;
+
+	UPROPERTY(EditAnywhere, Category = "Sounds")
+	TObjectPtr<USoundBase> ExplosionSound;
 
 	float MoveSpeed = 2000.0f;
 
