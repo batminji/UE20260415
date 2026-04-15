@@ -66,6 +66,12 @@ AMyPawn::AMyPawn()
 
 	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovement"));
 	FloatingPawnMovement->MaxSpeed = MoveSpeed;
+
+	static ConstructorHelpers::FClassFinder<AMyRocket> BP_Rocket(TEXT("/Script/Engine.Blueprint'/Game/Blueprints/BP_Rocket.BP_Rocket_C'"));
+	if (BP_Rocket.Succeeded())
+	{
+		RocketClass = BP_Rocket.Class;
+	}
 }
 
 void AMyPawn::Rotate(const FInputActionValue& Value)
@@ -76,7 +82,7 @@ void AMyPawn::Rotate(const FInputActionValue& Value)
 
 void AMyPawn::Fire()
 {
-	GetWorld()->SpawnActor<AMyRocket>(AMyRocket::StaticClass(), Arrow->K2_GetComponentToWorld());
+	GetWorld()->SpawnActor<AMyRocket>(RocketClass, Arrow->K2_GetComponentToWorld());
 }
 
 void AMyPawn::Boost()
@@ -113,9 +119,9 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if(EIC)
 	{
 		EIC->BindAction(IA_Rotate, ETriggerEvent::Triggered, this, &AMyPawn::Rotate);
-		EIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyPawn::Fire);
-		EIC->BindAction(IA_Boost, ETriggerEvent::Started, this, &AMyPawn::Boost);
-		EIC->BindAction(IA_Boost, ETriggerEvent::Completed, this, &AMyPawn::UnBoost);
+		EIC->BindAction(IA_Fire, ETriggerEvent::Triggered, this, &AMyPawn::Fire);
+		EIC->BindAction(IA_Boost, ETriggerEvent::Triggered, this, &AMyPawn::Boost);
+		EIC->BindAction(IA_Boost, ETriggerEvent::Canceled, this, &AMyPawn::UnBoost);
 	}
 }
 

@@ -15,6 +15,7 @@ class UCameraComponent;
 class UFloatingPawnMovement;
 class UArrowComponent;
 class UMyRotateStaticMeshComponent;
+class AMyRocket;
 
 UCLASS()
 class UE20260415_API AMyPawn : public APawn
@@ -73,6 +74,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> IA_Boost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rocket")
+	TSubclassOf<class AMyRocket> RocketClass;
 
 protected:
 	float MoveSpeed = 1000.0f;
