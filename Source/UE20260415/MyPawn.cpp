@@ -9,6 +9,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "MyRocket.h"
 
 // Sets default values
 AMyPawn::AMyPawn()
@@ -75,7 +76,7 @@ void AMyPawn::Roll(float InValue)
 
 void AMyPawn::Fire()
 {
-	
+	GetWorld()->SpawnActor<AMyRocket>(AMyRocket::StaticClass(), Arrow->K2_GetComponentToWorld());
 }
 
 void AMyPawn::Boost()
