@@ -32,12 +32,19 @@ AMyRocket::AMyRocket()
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 }
 
+void AMyRocket::ProcessActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+	Destroy();
+}
+
 // Called when the game starts or when spawned
 void AMyRocket::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	SetLifeSpan(0.5f);
+
+	OnActorBeginOverlap.AddDynamic(this, &AMyRocket::ProcessActorBeginOverlap);
 }
 
 // Called every frame

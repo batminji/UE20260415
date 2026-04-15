@@ -19,6 +19,9 @@ public:
 	// Sets default values for this actor's properties
 	AMyRocket();
 
+	UFUNCTION()
+	void ProcessActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
