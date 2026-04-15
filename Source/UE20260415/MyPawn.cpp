@@ -67,6 +67,31 @@ AMyPawn::AMyPawn()
 	FloatingPawnMovement->MaxSpeed = MoveSpeed;
 }
 
+void AMyPawn::Pitch(float InValue)
+{
+	AddActorLocalRotation(FRotator(InValue * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 0.0f, 0.0f));
+}
+
+void AMyPawn::Roll(float InValue)
+{
+	AddActorLocalRotation(FRotator(0.0f, 0.0f,InValue * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
+}
+
+void AMyPawn::Fire()
+{
+	GetWorld()->SpawnActor<AMyRocket>(AMyRocket::StaticClass(), Arrow->K2_GetComponentToWorld());
+}
+
+void AMyPawn::Boost()
+{
+	BoostValue = 1.0f;
+}
+
+void AMyPawn::UnBoost()
+{
+	BoostValue = 0.5f;
+}
+
 // Called when the game starts or when spawned
 void AMyPawn::BeginPlay()
 {
@@ -87,5 +112,11 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
+	// PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
+	// 
+	// PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &AMyPawn::Fire);
+	// PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Pressed, this, &AMyPawn::Boost);
+	// PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Released, this, &AMyPawn::UnBoost);
 }
 

@@ -6,9 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "MyPlayerController.generated.h"
 
-/**
- * 
- */
+class UInputMappingContext;
+
 UCLASS()
 class UE20260415_API AMyPlayerController : public APlayerController
 {
@@ -16,4 +15,9 @@ class UE20260415_API AMyPlayerController : public APlayerController
 	
 public:
 	AMyPlayerController();
+
+	virtual void OnPossess(APawn* InPawn) override;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TSoftObjectPtr<UInputMappingContext> InputMapping;
 };
