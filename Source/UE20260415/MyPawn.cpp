@@ -10,6 +10,7 @@
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyRocket.h"
+#include "MyRotateStaticMeshComponent.h"
 
 // Sets default values
 AMyPawn::AMyPawn()
@@ -30,13 +31,15 @@ AMyPawn::AMyPawn()
 		Body->SetStaticMesh(SM_Body.Object);
 	}
 
-	Left = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Left"));
+	Left = CreateDefaultSubobject<UMyRotateStaticMeshComponent>(TEXT("Left"));
 	Left->SetupAttachment(Body);
 	Left->SetRelativeLocation(FVector(37.f, -21.f, 0.f));
+	Left->RotationSpeed = 720.0f;
 
-	Right = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Right"));
+	Right = CreateDefaultSubobject<UMyRotateStaticMeshComponent>(TEXT("Right"));
 	Right->SetupAttachment(Body);
 	Right->SetRelativeLocation(FVector(37.f, 21.f, 0.f));
+	Right->RotationSpeed = 720.0f;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_Propeller(TEXT("/Script/Engine.StaticMesh'/Game/Assets/P38/SM_P38_Propeller.SM_P38_Propeller'"));
 	if (SM_Propeller.Succeeded())
@@ -51,7 +54,7 @@ AMyPawn::AMyPawn()
 	SpringArm->TargetArmLength = 120.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->bEnableCameraRotationLag = true;
-	SpringArm->bDoCollisionTest = true;
+	SpringArm->bDoCollisionTest = false;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
